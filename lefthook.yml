@@ -1,0 +1,41 @@
+pack-api:
+  piped: true
+  commands:
+    1_build:
+      run: docker/pack-ecs.sh api
+
+substrate:
+  piped: true
+  commands:
+    1_build:
+      run: docker-compose -f docker/docker-compose.yml build
+    2_up_redis:
+      run: docker-compose -f docker/docker-compose.yml up -d redis
+    3_up_db:
+      run: docker-compose -f docker/docker-compose.yml up -d db
+    4_migrate:
+      run: docker-compose -f docker/docker-compose.yml run migrate deploy --verify
+    5_seed:
+      run: docker-compose -f docker/docker-compose.yml run -e PGPASSWORD=password db psql -f /seeds/1_000-test-data.sql -h db_benchmarks -U bench -d benchmarks
+
+down-substrate:
+  piped: true
+  commands:
+    1_down:
+      run: docker-compose -f docker/docker-compose.yml down
+
+format:
+  piped: true
+  commands:
+    install:
+      run: rustup component add rustfmt
+    cargo_fmt:
+      run: cargo fmt --all
+
+pre-push:
+  piped: true
+  commands:
+    install:
+      run: rustup component add rustfmt
+    fmt:
+      run: cargo fmt --all -- --check

@@ -1,0 +1,39 @@
+version: "3.5"
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_${CI_JOB_ID:-benchmarks}
+    hostname: redis
+    restart: always
+    networks:
+      - compose_benchmarks
+    ports:
+      - 6379:6379
+
+  db:
+    image: postgres:latest
+    command: postgres -c 'max_connections=200'
+    container_name: db_${CI_JOB_ID:-benchmarks}
+    hostname: db
+    restart: always
+    environment:
+      POSTGRES_USER: bench
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: benchmarks
+    volumes:
+      - "../db/rds:/seeds"
+    networks:
+      - compose_benchmarks
+    ports:
+      - 5432:5432
+
+  migrate: 
+    build: 
+      context: ../
+      dockerfile: docker/migration.Dockerfile
+    networks:
+      - compose_benchmarks
+
+networks:
+  compose_benchmarks:
+    driver: bridge

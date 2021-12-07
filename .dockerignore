@@ -1,0 +1,8 @@
+**/target
+target
+docker/**/cargo
+docker/**/target
+**/node_modules
+cdk.out
+.git
+.idea

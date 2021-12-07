@@ -1,0 +1,6 @@
+%syntax-version=1.0.0
+%project=benchmarks
+%uri=https://github.com/dav1do/gql-benchmark
+
+db 2022-01-21T17:48:20Z David Estes <dav1do@users.noreply.github.com> # initial db
+user 2022-01-21T18:23:30Z David Estes <dav1do@users.noreply.github.com> # basic user model

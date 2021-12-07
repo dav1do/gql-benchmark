@@ -1,0 +1,26 @@
+.vscode
+.idea
+*.js
+node/stripe-app/.aws-sam
+!node/stripe-app/**/*.js
+!jest.config.js
+*.d.ts
+node_modules
+package-lock.json
+www/api.js
+all.sql
+.history
+
+# Parcel build directories
+.cache
+.build
+
+# Rust
+target
+
+docker/**/cargo
+docker/**/target
+docker/**/export
+
+.env
+.cargo
