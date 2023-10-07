@@ -18,6 +18,8 @@ pub use async_graphql::{
 
 use async_graphql::{EmptyMutation, Schema, SchemaBuilder};
 
+pub type BenchqlSchema = Schema<Query, EmptyMutation, Subscription>;
+
 pub fn new_schema() -> SchemaBuilder<Query, EmptyMutation, Subscription> {
     Schema::build(
         Query::default(),

@@ -2,6 +2,7 @@ mod context;
 mod errors;
 
 pub use bench_graphql::new_schema;
+use bench_graphql::BenchqlSchema;
 pub use context::{prepare_context, Context};
 pub use errors::Error;
 
@@ -32,6 +33,7 @@ pub async fn playground() -> HttpResponse {
 
 #[actix_web::route("/graphql", method = "GET", method = "POST")]
 pub async fn graphql_route(
+    schema: web::Data<BenchqlSchema>,
     ctx: web::Data<Context>,
     request: GraphQLRequest,
     token: Option<BearerAuth>,
@@ -39,7 +41,7 @@ pub async fn graphql_route(
     let ctx: Context = ctx.as_ref().clone();
     let token = token.map(|t| t.token().to_string()); //not doing anything with auth now
     let context = ctx.as_authed_graphql_context(token);
-    let schema = bench_graphql::new_schema().data(context).finish();
+    let req = request.into_inner().data(context);
 
-    Ok(schema.execute(request.into_inner()).await.into())
+    Ok(schema.execute(req).await.into())
 }

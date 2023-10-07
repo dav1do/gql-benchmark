@@ -23,12 +23,14 @@ async fn main() -> Result<(), Error> {
     let listen_addr: SocketAddr = listen_addr.parse().unwrap();
 
     let ctx = api_server::prepare_context().await?;
+    let schema = bench_graphql::new_schema().finish();
 
     HttpServer::new(move || {
         let scope = actix_web::web::scope("/api")
             .service(health)
             .service(graphql_route);
         App::new()
+            .app_data(Data::new(schema.clone()))
             .app_data(Data::new(ctx.clone()))
             .wrap(Logger::new(
                 "%a %t \"%r\" %s %b \"%{Referer}i\" \"%{User-Agent}i\" %T",
