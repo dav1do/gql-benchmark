@@ -15,19 +15,12 @@ impl Query {
         id: async_graphql::ID,
     ) -> async_graphql::Result<Option<User>> {
         let gql_ctx = ctx.data::<GraphqlContext>()?;
-
-        // TODO: add auth checks
-        // gql_ctx
-        //     .subject
-        //     .check_admin_membership()
-        //     .log_warn()
-        //     .map_err(|e| e.extend())?;
-
+        // Missing auth check
         let result = UserService::new(&gql_ctx)
             .by_id(&id.to_string())
             .await
             .log_warn()
             .map_err(|e| e.extend())?;
-        Ok(None)
+        Ok(result.map(|u| u.into()))
     }
 }

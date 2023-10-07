@@ -1,6 +1,6 @@
 use crate::Error;
 
-use bench_graphql::GraphqlContext;
+use bench_graphql::{DataLoaders, GraphqlContext};
 use tracing::info;
 
 pub struct Context {
@@ -21,7 +21,11 @@ impl Context {
         self,
         token: Option<String>,
     ) -> Result<GraphqlContext, Error> {
-        Ok(GraphqlContext { pool: self.pool })
+        Ok(GraphqlContext {
+            pool: self.pool.clone(),
+            loaders: DataLoaders::new(self.pool),
+            token,
+        })
     }
 }
 

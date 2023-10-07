@@ -1,5 +1,5 @@
 use crate::{Error, GraphqlContext};
-use db::{models::user::User as DbUser, Id};
+use db::{models::user::DbUser, Id};
 use std::str::FromStr;
 use util::ResultLogger;
 
@@ -19,7 +19,8 @@ impl UserService<'_> {
             field: "id".into(),
             message: format!("{}", e),
         })?;
-        let user = DbUser::by_id(&self.ctx.pool, &uuid).await?;
+
+        let user = self.ctx.loaders.users.load_one(uuid).await?;
         Ok(user)
     }
 }

@@ -5,7 +5,7 @@ mod services;
 mod subscription;
 mod types;
 
-pub use context::GraphqlContext;
+pub use context::{DataLoaders, GraphqlContext};
 pub use errors::Error;
 
 use crate::query::Query;

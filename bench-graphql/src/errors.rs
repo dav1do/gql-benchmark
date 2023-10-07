@@ -9,6 +9,8 @@ pub enum Error {
     Custom(String),
     #[error("Database Error: {0:?}")]
     DatabaseError(#[from] db::Error),
+    #[error("DataLoaderError: {0:?}")]
+    DataLoaderError(#[from] DataLoaderError),
 }
 
 impl ErrorExtensions for Error {
@@ -30,5 +32,25 @@ impl ErrorExtensions for Error {
 impl Error {
     pub fn custom<T: Into<String>>(v: T) -> Self {
         Self::Custom(v.into())
+    }
+}
+
+#[derive(Debug, Clone, ThisError)]
+pub enum DataLoaderError {
+    #[error("{0}")]
+    Custom(String),
+    #[error("SQL error: {0:?}")]
+    UnexpectedSqlError(String),
+    #[error("Unexpected database error: {0:?}")]
+    UnhandledDatabaseError(String),
+}
+
+impl From<db::Error> for DataLoaderError {
+    fn from(e: db::Error) -> Self {
+        match e {
+            db::Error::Sqlx(e) => Self::UnexpectedSqlError(e.to_string()),
+            db::Error::Custom(msg) => Self::Custom(msg),
+            e => Self::UnhandledDatabaseError(e.to_string()),
+        }
     }
 }

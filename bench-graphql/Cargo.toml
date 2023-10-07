@@ -6,7 +6,8 @@ publish = false
 license = "MIT"
 
 [dependencies]
-async-graphql = { version = "6", features = ["apollo_tracing"] }
+async-graphql = { version = "6", features = ["apollo_tracing", "dataloader"] }
+async-trait = "0.1"
 db = { path = "../db" }
 futures = "0.3"
 rand = "0.8"
@@ -16,3 +17,4 @@ thiserror = "1.0"
 tracing = "0.1"
 url = "2.4"
 util = { path = "../util" }
+tokio = "1.4"
