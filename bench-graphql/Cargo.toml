@@ -6,13 +6,13 @@ publish = false
 license = "MIT"
 
 [dependencies]
-async-graphql = {version = "3", features=["apollo_tracing"]}
+async-graphql = { version = "6", features = ["apollo_tracing"] }
 db = { path = "../db" }
 futures = "0.3"
 rand = "0.8"
-serde = { version = "1.0.127", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
 shared-types = { path = "../shared-types" }
-thiserror = "1.0.26"
+thiserror = "1.0"
 tracing = "0.1"
-url = "2.2"
+url = "2.4"
 util = { path = "../util" }

@@ -9,11 +9,11 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-graphql-actix-web = "3.0"
-async-graphql= "3"
-actix-web = "4.0.0-beta.8"
-actix-web-httpauth = "0.6.0-beta.2"
-actix-cors = "0.6.0-beta.2"
+async-graphql-actix-web = "6.0"
+async-graphql= "6"
+actix-web = "4.4"
+actix-web-httpauth = "0.8"
+actix-cors = "0.6"
 anyhow = "1.0"
 async-channel = "1.4"
 async-trait = "0.1"
@@ -36,7 +36,7 @@ tracing = "0.1"
 tracing-subscriber = { version="0.3", features = ["json", "env-filter"] }
 url = "2.2"
 util = { path = "../util" }
-uuid = { version = "0.8", features = ["v4", "serde"] }
+uuid = { version = "1.4", features = ["v4", "serde"] }
 
 [[bin]]
 name = "api-server-bootstrap"

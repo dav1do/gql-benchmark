@@ -40,14 +40,16 @@ impl DatabasePool {
     ) -> Result<Self, Error> {
         let enable_logging = enable_sqlx_logging();
 
-        let mut connection_options: PgConnectOptions = url.parse().log_warn()?;
+        let connection_options: PgConnectOptions = url.parse().log_warn()?;
 
-        if !enable_logging {
-            connection_options.disable_statement_logging();
-        }
+        let connection_options = if !enable_logging {
+            connection_options.disable_statement_logging()
+        } else {
+            connection_options
+        };
 
         let pool = PgPoolOptions::new()
-            .connect_timeout(options.connect_timeout)
+            .acquire_timeout(options.connect_timeout)
             .max_connections(options.max_size)
             .min_connections(options.min_size)
             .connect_with(connection_options)
@@ -55,15 +57,17 @@ impl DatabasePool {
             .log_warn()?;
 
         let ro_pool = if let Some(url) = ro_url {
-            let mut connection_options: PgConnectOptions = url.parse().log_warn()?;
+            let connection_options: PgConnectOptions = url.parse().log_warn()?;
 
-            if !enable_logging {
-                connection_options.disable_statement_logging();
-            }
+            let connection_options = if !enable_logging {
+                connection_options.disable_statement_logging()
+            } else {
+                connection_options
+            };
 
             Some(
                 PgPoolOptions::new()
-                    .connect_timeout(options.connect_timeout)
+                    .acquire_timeout(options.connect_timeout)
                     .max_connections(options.max_size)
                     .min_connections(options.min_size)
                     .max_lifetime(*crate::MAX_CONNECTION_LIFETIME)

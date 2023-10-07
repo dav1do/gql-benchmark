@@ -16,6 +16,11 @@ services:
     container_name: db_${CI_JOB_ID:-benchmarks}
     hostname: db
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_USER: bench
       POSTGRES_PASSWORD: password
@@ -31,6 +36,10 @@ services:
     build: 
       context: ../
       dockerfile: docker/migration.Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["deploy", "--verify"]
     networks:
       - compose_benchmarks
 

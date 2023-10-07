@@ -6,5 +6,4 @@ members = [
     "shared-types"
 ]
 
-[patch.crates-io]
-# 
+resolver = "2"
